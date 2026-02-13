@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pymacops"
+version = "0.1.0"
+description = "macOS automation helpers"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+	"pyobjc-framework-Quartz>=12.0",
+	"pyobjc-framework-Cocoa>=12.0",
+	"pyobjc-framework-Vision>=12.0",
+	"opencv-python>=4.13.0.0",
+	"Pillow>=12.0",
+]
+
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
