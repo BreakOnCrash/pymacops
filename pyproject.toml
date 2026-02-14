@@ -16,9 +16,16 @@ dependencies = [
 	"Pillow>=12.0",
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest>=7.0",
+]
 
 [tool.setuptools]
 package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -13,9 +13,12 @@ from .screenshot import Screenshot
 from .types import Point, Rect, TextBlock
 
 
-class ImageMatcher:
+class OpsVision:
 
-    def find_image(self, haystack: Image.Image, needle: Image.Image, threshold: float = 0.9) -> Optional[Point]:
+    @staticmethod
+    def find_image(haystack: Image.Image,
+                   needle: Image.Image,
+                   threshold: float = 0.9) -> Optional[Point]:
         haystack_gray = cv2.cvtColor(np.array(haystack), cv2.COLOR_BGR2GRAY)
         needle_gray = cv2.cvtColor(np.array(needle), cv2.COLOR_BGR2GRAY)
 
@@ -27,20 +30,27 @@ class ImageMatcher:
 
         return Point(float(max_loc[0]), float(max_loc[1]))
 
+    @staticmethod
+    def find_text(image: Screenshot,
+                  languages: Optional[List[str]] = None,
+                  text: str = None
+                  ) -> Optional[Point]:
+        if not text:
+            return None
 
-class BaseOCRReader:
+        target = text.lower()
+        blocks = OpsVision._read_text(image, languages=languages)
+        for block in blocks:
+            if block.bounds and target in block.text.lower():
+                return Point(float(block.bounds.x), float(block.bounds.y))
 
-    def read_text(
-            self, image, languages) -> List[TextBlock]:
-        raise NotImplementedError
+        return None
 
-
-class VisionOCR(BaseOCRReader):
-
-    def read_text(
-        self, image: Screenshot, languages: Optional[List[str]] = None
+    @staticmethod
+    def _read_text(
+        image: Screenshot, languages: Optional[List[str]] = None
     ) -> List[TextBlock]:
-        cgimage = self._to_cgimage(image)
+        cgimage = image.cgimage if hasattr(image, "cgimage") else image
         request = VNRecognizeTextRequest.alloc().init()
         if languages:
             request.setRecognitionLanguages_(languages)
@@ -69,25 +79,3 @@ class VisionOCR(BaseOCRReader):
             )
             blocks.append(TextBlock(text=text, bounds=bounds))
         return blocks
-
-    def find_text(
-        self, image: Screenshot, 
-        languages: Optional[List[str]] = None,
-        text: str = None
-    ) -> Optional[Point]:
-        if not text:
-            return None
-
-        target = text.lower()
-        blocks = self.read_text(image, languages=languages)
-        for block in blocks:
-            if block.bounds and target in block.text.lower():
-                return Point(float(block.bounds.x), float(block.bounds.y))
-
-        return None
-
-    @staticmethod
-    def _to_cgimage(image: Screenshot) -> Quartz.CGImageRef:
-        if hasattr(image, "cgimage"):
-            return image.cgimage
-        return image

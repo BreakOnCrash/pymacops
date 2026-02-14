@@ -83,10 +83,9 @@ class Screenshot:
 
 
 class Screenshotter:
-    """Capture screen regions or windows."""
 
+    @staticmethod
     def capture(
-        self,
         region: Optional[Rect] = None,
         window_id: Optional[int] = None,
         include_cursor: bool = False,
@@ -99,21 +98,23 @@ class Screenshotter:
             target = window_id
 
         image = Quartz.CGWindowListCreateImage(
-            self._region_rect(region),
+            Screenshotter._region_rect(region),
             option,
             target,
-            self._image_option(include_cursor),
+            Screenshotter._image_option(include_cursor),
         )
         if not image:
             raise PermissionDeniedError("Failed to capture screen image.")
         return Screenshot(image)
 
-    def _region_rect(self, region: Optional[Rect]):
+    @staticmethod
+    def _region_rect(region: Optional[Rect]):
         if region is None:
             return Quartz.CGRectInfinite
         return Quartz.CGRectMake(region.x, region.y, region.width, region.height)
 
-    def _image_option(self, include_cursor: bool):
+    @staticmethod
+    def _image_option(include_cursor: bool):
         if include_cursor:
             return Quartz.kCGWindowImageDefault
         return Quartz.kCGWindowImageBoundsIgnoreFraming

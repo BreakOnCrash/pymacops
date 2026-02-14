@@ -3,7 +3,7 @@ from .display import DisplayInfo, DisplayManager
 from .input import Keyboard, Mouse
 from .screenshot import Screenshotter
 from .types import Point, Rect, Size, TextBlock, WindowInfo
-from .vision import ImageMatcher, VisionOCR
+from .vision import OpsVision
 from .window import WindowManager
 
 __all__ = [
@@ -19,8 +19,7 @@ __all__ = [
     "Screenshotter",
     "Size",
     "TextBlock",
-    "VisionOCR",
-    "ImageMatcher",
+    "OpsVision",
     "WindowInfo",
     "WindowManager",
 ]

@@ -54,9 +54,3 @@ class WindowInfo:
 class TextBlock:
     text: str
     bounds: Optional[Rect] = None
-
-
-def first_or_none(items: Iterable[WindowInfo]) -> Optional[WindowInfo]:
-    for item in items:
-        return item
-    return None
