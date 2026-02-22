@@ -21,6 +21,9 @@ test = [
     "pytest>=7.0",
 ]
 
+[tool.pylint.MASTER]
+ignore-paths = '^examples/.*$'
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
