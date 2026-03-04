@@ -24,6 +24,19 @@ test = [
 [tool.pylint.MASTER]
 ignore-paths = '^examples/.*$'
 
+[tool.pylint.TYPECHECK]
+ignored-modules = ["Quartz", "AppKit", "Vision", "cv2"]
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+	"missing-module-docstring",
+	"missing-class-docstring",
+	"missing-function-docstring",
+	"line-too-long",
+	"too-few-public-methods",
+	"too-many-locals",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
